@@ -1,0 +1,6 @@
+@EndUserText.label: 'Vuelos'
+define service Zhgm1_flight_u {
+  expose zhgm1_I_TRAVEL_U;
+  expose zhgm1_I_BOOKING_U;
+  expose zhgm1_I_FLIGHT;
+}

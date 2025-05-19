@@ -1,0 +1,7 @@
+@EndUserText.label: 'Read-Only Managying Flights'
+define service Zhgm_flight_r {
+  expose zhgm_i_connection_r as Connections;
+  expose zhgm_I_FLIGHT_R     as Flights;
+  expose zhgm_I_CARRIER      as AirLine;
+  expose zhgm_I_AIRPORT      as Airport;
+}

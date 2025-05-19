@@ -1,0 +1,38 @@
+// 1 .- Implementar Behavior Pool ZBP_HGM1_TRAVEL_U
+unmanaged implementation in class zbp_hgm1_i_travel_u unique;
+//strict ( 2 ); //Uncomment this line in order to enable strict mode 2. The strict mode has two variants (strict(1), strict(2)) and is prerequisite to be future proof regarding syntax and to be able to release your BO.
+
+// Este es el Behavior Definition para el Nodo Raíz
+define behavior for zhgm1_I_TRAVEL_U alias Travel
+//late numbering
+lock master
+authorization master ( instance )
+etag master Lastchangedat
+//The specified field of an ETag is used to determine changes to the requested resource.
+//Usually, fields like last changed timestamp, hash values, or version counters are used as ETags.
+{
+  create;
+  update;
+  delete;
+  field ( readonly ) TravelId;
+  // Campos Agregados
+  field ( mandatory ) AgencyID, CustomerID, BeginDate, EndDate;
+  // Action agregada, esta acción se definió en la ZHGM1_I_TRAVEL_U para el campo STATUS
+  action set_status_booked result [1] $self;
+
+  // Listado de Composicicones en el Modelo de Datos
+  association _Booking { create; }
+}
+
+// Este es el Behavior Definition para el Nodo Hijo
+define behavior for zhgm1_I_BOOKING_U alias booking
+//late numbering
+lock dependent by _Travel
+authorization dependent by _Travel
+//etag master <field_name>
+{
+  update;
+  delete;
+  field ( readonly ) TravelId, BookingId;
+  association _Travel;
+}
