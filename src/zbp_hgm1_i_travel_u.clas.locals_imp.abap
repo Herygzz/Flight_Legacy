@@ -1,7 +1,7 @@
 CLASS lhc_Travel DEFINITION INHERITING FROM cl_abap_behavior_handler.
   PRIVATE SECTION.
 
-*Travel = Alias en e Behavior Definition
+*Travel = Alias en el Behavior Definition
     METHODS get_instance_authorizations FOR INSTANCE AUTHORIZATION
       IMPORTING keys REQUEST requested_authorizations FOR Travel RESULT result.
 
@@ -42,6 +42,45 @@ CLASS lhc_Travel IMPLEMENTATION.
 
   METHOD create_travel.
 
+    DATA ls_travel_out TYPE /dmo/travel.
+    DATA: lv_max_number TYPE /dmo/travel_id.
+
+    SELECT MAX( travel_id ) FROM /dmo/travel INTO @lv_max_number.
+    IF sy-subrc NE 0.
+      lv_max_number = 1.
+    ELSE.
+      lv_max_number = lv_max_number + 1.
+    ENDIF.
+
+
+    LOOP AT it_travel_create ASSIGNING FIELD-SYMBOL(<fs_travel_create>).
+
+*call function 'get_next_numbers_rap'
+*EXPORTING i_object = 'ZTRAVELNUM'
+*importing
+
+*      CLEAR ls_travel_in.
+*      ls_travel_in = CORRESPONDING #( /dmo/cl_travel_auxiliary=>map_travel_cds_to_db( CORRESPONDING #( <fs_travel_create> ) ) ).
+*      CALL FUNCTION '/DMO/FLIGHT_TRAVEL_CREATE'
+*        EXPORTING
+*          is_travel   = ls_travel_in
+*        IMPORTING
+*          es_travel   = ls_travel_out
+*          et_messages = lt_messages.
+*      IF lt_messages IS INITIAL.
+*        INSERT VALUE #( %cid = <fs_travel_create>-%cid travelid = ls_travel_out-travel_id )
+*        INTO TABLE mapped-travel.
+*      ELSE.
+*        lcl_message_helper=>handle_travel_messages(
+*        EXPORTING
+*        iv_cid = <fs_travel_create>-%cid
+*        it_messages = lt_messages
+*        CHANGING
+*        failed = failed-travel
+*        reported = reported-travel ).
+*      ENDIF.
+    ENDLOOP.
+
   ENDMETHOD.
 
   METHOD update_travel.
@@ -50,12 +89,6 @@ CLASS lhc_Travel IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD delete_travel.
-
-*    FIELD-SYMBOLS: <fs_delete_travel> TYPE any.
-*
-*    LOOP AT it_travel_delete ASSIGNING <fs_delete_travel>.
-*
-*    ENDLOOP.
 
   ENDMETHOD.
 

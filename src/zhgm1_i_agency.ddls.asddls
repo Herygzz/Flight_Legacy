@@ -6,7 +6,7 @@
 @Metadata.ignorePropagatedAnnotations: true
 
 @Search.searchable: true
-define view zhgm1_I_AGENCY
+define view ZHGM1_I_AGENCY
   as select from /dmo/agency
   association [0..1] to I_Country as _Country on $projection.CountryCode = _Country.Country
 {

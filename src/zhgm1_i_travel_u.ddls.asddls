@@ -11,7 +11,7 @@ define root view zhgm1_I_TRAVEL_U
   as select from /dmo/travel
 
   composition [0..*] of zhgm1_I_BOOKING_U as _Booking
-  association [0..1] to zhgm1_I_AGENCY    as _Agency   on $projection.AgencyID = _Agency.AgencyId
+  association [0..1] to ZHGM1_I_AGENCY    as _Agency   on $projection.AgencyID = _Agency.AgencyId
   association [0..1] to zhgm1_I_CUSTOMER  as _Customer on $projection.CustomerID = _Customer.CustomerId
   association [0..1] to I_Currency        as _Currency on $projection.CurrencyCode = _Currency.Currency
 
@@ -25,10 +25,12 @@ define root view zhgm1_I_TRAVEL_U
       @UI.selectionField: [ { position: 10 } ]
       @Search.defaultSearchElement: true
   key travel_id     as TravelId,
-      @UI: {
-      lineItem: [ { position: 20, importance: #HIGH } ], identification:[ { position: 20 } ], selectionField: [ { position: 20 } ] }
+      @UI.lineItem: [ { position: 20, importance: #HIGH } ]
+      @UI.identification:[ { position: 20 } ]
+      @UI.selectionField: [ { position: 20 } ]
+      //      @Consumption.valueHelpDefinition: [{ entity.name: 'ZHGM1_I_AGENCY', entity.element: 'AgencyId' } ]
       @Consumption.valueHelpDefinition: [{ entity.name: 'zhgm1_I_AGENCY', entity.element: 'AgencyId' } ]
-      @ObjectModel.text.association: '_Agency'
+      //      @ObjectModel.text.association: '_Agency'
       @Search.defaultSearchElement: true
       agency_id     as AgencyID,
       @UI.lineItem: [ { position: 30, importance: #HIGH } ]
@@ -38,6 +40,7 @@ define root view zhgm1_I_TRAVEL_U
       @ObjectModel.text.association: '_Customer'
       @Search.defaultSearchElement: true
       customer_id   as CustomerID,
+
       @UI: { lineItem: [ { position: 40, importance: #MEDIUM } ], identification:[ { position: 40 } ] }
       begin_date    as BeginDate,
       @UI.lineItem: [ { position: 41, importance: #MEDIUM } ]
@@ -54,7 +57,6 @@ define root view zhgm1_I_TRAVEL_U
       currency_code as CurrencyCode,
       @UI.identification:[ { position: 45, label: 'Comment' } ]
       description   as Description,
-      //      @UI.lineItem: [{ position: 100, label: 'Status' }]
       @UI.lineItem: [{ position: 50, importance: #HIGH, type: #FOR_ACTION, dataAction: 'set_status_booked', label: 'Set to Booked' }]
       status        as Status,
       createdby     as Createdby,
